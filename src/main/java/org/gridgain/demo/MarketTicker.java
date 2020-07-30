@@ -16,7 +16,11 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
+import org.apache.ignite.IgniteTransactions;
 import org.apache.ignite.cache.query.SqlFieldsQuery;
+import org.apache.ignite.transactions.Transaction;
+import org.apache.ignite.transactions.TransactionConcurrency;
+import org.apache.ignite.transactions.TransactionIsolation;
 
 public class MarketTicker {
     /**
@@ -37,15 +41,21 @@ public class MarketTicker {
     /**
      * A reference to the utility cache.
      */
-    private IgniteCache utilityCache;
+    private IgniteCache<TradeKey, Trade> tradeCache;
+
+    /**
+     * Ignite instance.
+     */
+    private Ignite ignite;
 
     /**
      * IDs generator.
      */
     private AtomicLong counter = new AtomicLong();
 
-    public MarketTicker(IgniteCache utilityCache) {
-        this.utilityCache = utilityCache;
+    public MarketTicker(Ignite ignite) {
+        this.ignite = ignite;
+        this.tradeCache = ignite.cache("Trade");
     }
 
     public void start() {
@@ -95,19 +105,24 @@ public class MarketTicker {
             JsonElement mes = result.getMessage();
             JsonObject json = mes.getAsJsonObject();
 
-            SqlFieldsQuery query = new SqlFieldsQuery(
-                "INSERT INTO Trade (id, buyer_id, symbol, order_quantity, bid_price, trade_type, order_date) VALUES (?,?,?,?,?,?,?)").
-                setSchema("PUBLIC");
+            TradeKey key = new TradeKey(counter.incrementAndGet(), new Random().nextInt(6) + 1);
 
-            utilityCache.query(query.setArgs(
-                counter.incrementAndGet(), /* id */
-                new Random().nextInt(6) + 1, /* buyer_id */
+            Trade trade = new Trade(
                 json.get("symbol").getAsString(),
                 json.get("order_quantity").getAsInt(),
                 json.get("bid_price").getAsDouble(),
                 json.get("trade_type").getAsString(),
                 new Timestamp(json.get("timestamp").getAsLong() * 1000)
-            ));
+            );
+
+            IgniteTransactions txs = ignite.transactions();
+
+            try (Transaction tx = txs.txStart(TransactionConcurrency.PESSIMISTIC, TransactionIsolation.REPEATABLE_READ)) {
+                // Using transactions to demonstrate tracing capabilities.
+                tradeCache.put(key, trade);
+
+                tx.commit();
+            }
         }
 
         /**

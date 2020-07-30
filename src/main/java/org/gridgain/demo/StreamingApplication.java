@@ -24,6 +24,7 @@ import org.apache.ignite.Ignition;
 import org.apache.ignite.cache.query.SqlFieldsQuery;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
+import org.apache.ignite.spi.tracing.opencensus.OpenCensusTracingSpi;
 
 public class StreamingApplication {
     /* Application default execution time. */
@@ -49,17 +50,21 @@ public class StreamingApplication {
             }
         }
 
+        System.out.println("Application execution time: " + execTime + " minutes");
+
         // Starting Ignite.
         IgniteConfiguration cfg = new IgniteConfiguration();
 
         cfg.setClientMode(true);
+        cfg.setPeerClassLoadingEnabled(true);
+        cfg.setTracingSpi(new OpenCensusTracingSpi());
 
-        ignite = Ignition.start();
+        ignite = Ignition.start(cfg);
 
         createSchema(ignite);
 
         // Starting Market Ticker.
-        ticker = new MarketTicker(ignite.cache("utilityCache"));
+        ticker = new MarketTicker(ignite);
         ticker.start();
 
         // Shutting down the application in 'execTime' minutes.
@@ -94,7 +99,8 @@ public class StreamingApplication {
                 "trade_type varchar," +
                 "order_date timestamp," +
                 "PRIMARY KEY(id, buyer_id)) " +
-                "WITH \"backups=1, atomicity=transactional, cache_name=Trade, affinity_key=buyer_id\"").
+                "WITH \"backups=1, atomicity=transactional, cache_name=Trade, " +
+                "KEY_TYPE=org.gridgain.demo.TradeKey, VALUE_TYPE=org.gridgain.demo.Trade, affinity_key=buyer_id\"").
             setSchema("PUBLIC")).getAll();
 
         utilityCache.query(new SqlFieldsQuery(

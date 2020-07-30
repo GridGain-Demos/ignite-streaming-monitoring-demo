@@ -1,0 +1,22 @@
+version: '3.7'
+services:
+  ignite-streaming-app:
+    image: ignite-streaming-app
+    container_name: ignite-streaming-app
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+        reservations:
+          cpus: '0.50'
+    environment:
+      - IGNITE_WORK_DIR=/opt/ignite/work
+      - execTime=5
+    networks:
+      - ignite-net
+    volumes:
+      - ../work:/opt/ignite/work
+
+networks:
+  ignite-net:
+    driver: bridge

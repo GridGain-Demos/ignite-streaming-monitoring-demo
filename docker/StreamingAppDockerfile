@@ -1,0 +1,6 @@
+FROM openjdk:8
+COPY ./target/dependency-jars /usr/app/dependency-jars
+ADD ./target/ignite-streaming-app.jar /usr/app/ignite-streaming-app.jar
+WORKDIR /usr/app
+ENTRYPOINT java -jar ignite-streaming-app.jar execTime=$execTime
+
