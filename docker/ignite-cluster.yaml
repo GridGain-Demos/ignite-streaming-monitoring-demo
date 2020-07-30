@@ -1,0 +1,17 @@
+version: '3.7'
+services:
+  ignite-server-node:
+    image: gridgain/ultimate:8.7.22
+    environment:
+      - CONFIG_URI=/opt/ignite/ext-config/ignite-config-node.xml
+      - IGNITE_WORK_DIR=/opt/ignite/work
+      - OPTION_LIBS=control-center-agent
+    networks:
+      - ignite-net
+    volumes:
+      - ../config:/opt/ignite/ext-config
+      - ../work:/opt/ignite/work
+
+networks:
+  ignite-net:
+    driver: bridge
