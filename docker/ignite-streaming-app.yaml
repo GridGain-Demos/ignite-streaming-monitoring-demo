@@ -11,7 +11,7 @@ services:
           cpus: '0.50'
     environment:
       - IGNITE_WORK_DIR=/opt/ignite/work
-      - execTime=5
+      - execTime=15
     networks:
       - ignite-net
     volumes:
