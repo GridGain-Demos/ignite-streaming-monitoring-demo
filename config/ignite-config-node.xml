@@ -35,7 +35,7 @@
                 <property name="defaultDataRegionConfiguration">
                     <bean class="org.apache.ignite.configuration.DataRegionConfiguration">
                         <!-- max RAM size -->
-                        <property name="maxSize" value="#{450 * 1024 * 1024}"/>
+                        <property name="maxSize" value="#{150 * 1024 * 1024}"/>
 
                         <!-- memory metrics -->
                         <property name="metricsEnabled" value="true"/>
