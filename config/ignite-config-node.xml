@@ -54,6 +54,14 @@
             <bean class="org.apache.ignite.spi.tracing.opencensus.OpenCensusTracingSpi"/>
         </property>
 
+        <property name="pluginConfigurations">
+            <bean class="org.gridgain.grid.configuration.GridGainConfiguration">
+                <property name="snapshotConfiguration">
+                    <bean class="org.gridgain.grid.configuration.SnapshotConfiguration"/>
+                </property>
+            </bean>
+        </property>
+
         <!-- Configuring the IP finder for nodes auto-discovery. -->
         <property name="discoverySpi">
             <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
