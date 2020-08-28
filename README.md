@@ -6,4 +6,4 @@ market deals in real-time from the
 and forwards the deals to a locally running Ignite cluster.
 
 The demo is created for the Apache Ignite Management and Monitoring With Control Center tutorial. Follow the steps of the
-tutorial to learn how to work with the demo: TBD
+tutorial to learn how to work with the demo: https://www.gridgain.com/docs/tutorials/management-monitoring/overview
