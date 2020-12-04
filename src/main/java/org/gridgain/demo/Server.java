@@ -5,6 +5,6 @@ import org.apache.ignite.configuration.IgniteConfiguration;
 
 public class Server {
     public static void main(String[] args) {
-        Ignition.start(new IgniteConfiguration().setPeerClassLoadingEnabled(true));
+        Ignition.start("config/ignite-config-node.xml");
     }
 }

@@ -16,7 +16,7 @@
     </repositories>
 
     <properties>
-        <ignite.version>2.9.0</ignite.version>
+        <gridgain.version>8.7.32</gridgain.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
@@ -24,33 +24,39 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.ignite</groupId>
+            <groupId>org.gridgain</groupId>
             <artifactId>ignite-core</artifactId>
-            <version>${ignite.version}</version>
+            <version>${gridgain.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.ignite</groupId>
+            <groupId>org.gridgain</groupId>
             <artifactId>ignite-indexing</artifactId>
-            <version>${ignite.version}</version>
+            <version>${gridgain.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.ignite</groupId>
+            <groupId>org.gridgain</groupId>
             <artifactId>ignite-spring</artifactId>
-            <version>${ignite.version}</version>
+            <version>${gridgain.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>org.apache.ignite</groupId>
+            <groupId>org.gridgain</groupId>
             <artifactId>ignite-opencensus</artifactId>
-            <version>${ignite.version}</version>
+            <version>${gridgain.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.gridgain</groupId>
             <artifactId>control-center-agent</artifactId>
-            <version>2.9.0.0</version>
+            <version>${gridgain.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.gridgain</groupId>
+            <artifactId>gridgain-ultimate</artifactId>
+            <version>${gridgain.version}</version>
         </dependency>
 
         <dependency>

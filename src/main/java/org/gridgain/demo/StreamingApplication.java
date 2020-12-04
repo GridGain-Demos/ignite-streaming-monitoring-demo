@@ -28,7 +28,7 @@ import org.apache.ignite.spi.tracing.opencensus.OpenCensusTracingSpi;
 
 public class StreamingApplication {
     /* Application default execution time. */
-    private static int DEFAULT_EXEC_TIME_MINS = 1;
+    private static int DEFAULT_EXEC_TIME_MINS = 5;
 
     /* Ignite client instance. */
     private static Ignite ignite;
