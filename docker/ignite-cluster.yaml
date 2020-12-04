@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   ignite-server-node:
-    image: gridgain/ultimate:8.7.24
+    image: gridgain/ultimate:8.7.32
     environment:
       - CONFIG_URI=/opt/ignite/ext-config/ignite-config-node.xml
       - IGNITE_WORK_DIR=/opt/ignite/work
