@@ -17,6 +17,39 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="Maven: org.gridgain:ignite-core:8.7.32" level="project" />
+    <orderEntry type="library" name="Maven: org.gridgain:ignite-shmem:8.7.3" level="project" />
+    <orderEntry type="library" name="Maven: org.gridgain:ignite-indexing:8.7.32" level="project" />
+    <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.12" level="project" />
+    <orderEntry type="library" name="Maven: org.gridgain:ignite-h2:8.7.32" level="project" />
+    <orderEntry type="library" name="Maven: javax.servlet:javax.servlet-api:3.1.0" level="project" />
+    <orderEntry type="library" name="Maven: org.locationtech.jts:jts-core:1.15.0" level="project" />
+    <orderEntry type="library" name="Maven: org.gridgain:ignite-spring:8.7.32" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-core:4.3.29.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-aop:4.3.29.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-beans:4.3.29.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-context:4.3.29.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-expression:4.3.29.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-tx:4.3.29.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.springframework:spring-jdbc:4.3.29.RELEASE" level="project" />
+    <orderEntry type="library" name="Maven: org.gridgain:ignite-opencensus:8.7.32" level="project" />
+    <orderEntry type="library" name="Maven: org.gridgain:control-center-agent:8.7.32" level="project" />
+    <orderEntry type="library" name="Maven: org.gridgain:gridgain-ultimate:8.7.32" level="project" />
+    <orderEntry type="library" name="Maven: org.gridgain:ignite-schedule:8.7.32" level="project" />
+    <orderEntry type="library" name="Maven: it.sauronsoftware.cron4j:cron4j:2.2.5" level="project" />
+    <orderEntry type="library" name="Maven: org.gridgain:gridgain-core:8.7.32" level="project" />
+    <orderEntry type="library" name="Maven: javax.xml.bind:jaxb-api:2.3.0" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.xml.bind:jaxb-impl:2.3.0" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.xml.bind:jaxb-core:2.3.0" level="project" />
+    <orderEntry type="library" name="Maven: com.sun.activation:javax.activation:1.2.0" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp3:okhttp:3.14.2" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okio:okio:1.12.0" level="project" />
+    <orderEntry type="library" name="Maven: org.bouncycastle:bcpkix-jdk15on:1.60" level="project" />
+    <orderEntry type="library" name="Maven: org.bouncycastle:bcprov-jdk15on:1.60" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-vfs2:2.6.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.hadoop:hadoop-hdfs-client:3.2.1" level="project" />
+    <orderEntry type="library" name="Maven: com.squareup.okhttp:okhttp:2.7.5" level="project" />
+    <orderEntry type="library" name="Maven: com.jcraft:jsch:0.1.55" level="project" />
+    <orderEntry type="library" name="Maven: org.gridgain:ignite-core:8.7.32" level="project" />
     <orderEntry type="library" name="Maven: javax.cache:cache-api:1.0.0" level="project" />
     <orderEntry type="library" name="Maven: org.jetbrains:annotations:16.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.gridgain:ignite-shmem:8.7.3" level="project" />
