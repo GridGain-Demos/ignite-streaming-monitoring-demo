@@ -5,5 +5,4 @@ market deals in real-time from the
 [PubNub Market Order Data Stream](https://www.pubnub.com/developers/realtime-data-streams/financial-securities-market-orders/)
 and forwards the deals to a locally running Ignite cluster.
 
-The demo is created for the Apache Ignite Management and Monitoring With Control Center tutorial. Follow the steps of the
-tutorial to learn how to work with the demo: https://www.gridgain.com/docs/tutorials/management-monitoring/overview
+The demo is created for the Control Center [written tutorial](https://www.gridgain.com/docs/tutorials/management-monitoring/overview) and [foundation course](https://www.gridgain.com/products/services/training/how-monitor-and-manage-apache-ignite-gridgain-control-center). Join the instructor-led course and complete at your own pace.
