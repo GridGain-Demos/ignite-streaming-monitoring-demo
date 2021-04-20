@@ -16,7 +16,7 @@
     </repositories>
 
     <properties>
-        <gridgain.version>8.7.32</gridgain.version>
+        <gridgain.version>8.7.33</gridgain.version>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
