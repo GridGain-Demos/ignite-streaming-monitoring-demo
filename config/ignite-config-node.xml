@@ -28,6 +28,7 @@
     <bean class="org.apache.ignite.configuration.IgniteConfiguration">
         <!-- Set to true to enable distributed class loading for examples, default is false. -->
         <property name="peerClassLoadingEnabled" value="true"/>
+        <property name="deploymentMode" value="CONTINUOUS"/>
 
         <!-- Memory configuration. -->
         <property name="dataStorageConfiguration">

@@ -7,40 +7,66 @@ import java.util.Random;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.pubnub.api.PNConfiguration;
-import com.pubnub.api.PubNub;
-import com.pubnub.api.models.consumer.pubsub.PNMessageResult;
+import org.gridgain.demo.model.Account;
+import org.gridgain.demo.model.Holdings;
+import org.gridgain.demo.model.HoldingsKey;
+import org.gridgain.demo.model.Product;
+import org.gridgain.demo.model.ProductPrice;
+import org.gridgain.demo.model.Trade;
 
-public class RandomMarketTicker implements Runnable, MarketTicker {
+import com.github.javafaker.Faker;
+
+public class RandomMarketTicker implements Runnable {
 	private Random random;
 	private List<Stock> stocks;
-	private Gson gson;
 	private StreamCallback streamCallback;
-	private PubNub pubNub;
 	private ScheduledFuture<?> scheduledFuture;
+
+	private static final AtomicLong TRADE_SEQ = new AtomicLong();
+	private static final AtomicLong PROD_PRICE_SEQ = new AtomicLong();
+	private static final AtomicLong HOLDINGS_SEQ = new AtomicLong();
+	public static final int NUM_ACCOUNTS = 25;
+	private static final long START_HOLDING = 10000;
 
 	public RandomMarketTicker(StreamCallback streamCallback) {
 		this.streamCallback = streamCallback;
 
+		System.out.println("Generating Products...");
+
 		stocks = new ArrayList<Stock>();
 
-		stocks.add(new Stock("Amazon", 50, 250, 100));
-		stocks.add(new Stock("Apple", 100, 1000, 100));
-		stocks.add(new Stock("Dell", 100, 500, 100));
-		stocks.add(new Stock("Facebook", 85, 400, 100));
-		stocks.add(new Stock("Google", 75, 300, 100));
-		stocks.add(new Stock("HP", 50, 750, 100));
-		stocks.add(new Stock("IBM", 65, 250, 100));
-		stocks.add(new Stock("Intel", 150, 550, 100));
-		stocks.add(new Stock("Tesla", 110, 600, 100));
-		stocks.add(new Stock("Yahoo", 10, 100, 100));
+		stocks.add(new Stock(1, "Amazon", "AMZ", 50, 250, 100));
+		stocks.add(new Stock(2, "Apple", "AAPL", 100, 1000, 100));
+		stocks.add(new Stock(3, "Dell", "DELL", 100, 500, 100));
+		stocks.add(new Stock(4, "Meta", "META", 85, 400, 100));
+		stocks.add(new Stock(5, "Google", "GOOGL", 75, 300, 100));
+		stocks.add(new Stock(6, "HP", "HP", 50, 750, 100));
+		stocks.add(new Stock(7, "IBM", "IBM", 65, 250, 100));
+		stocks.add(new Stock(8, "Intel", "INTC", 150, 550, 100));
+		stocks.add(new Stock(9, "Tesla", "TSLA", 110, 600, 100));
+		stocks.add(new Stock(10, "Oracle", "ORCL", 10, 100, 100));
+
+		for (Stock stock : stocks) {
+			streamCallback.message(stock);
+		}
+
+		System.out.println("Generating Accounts...");
+		Faker faker = new Faker();
+		for (long i = 0; i < NUM_ACCOUNTS; i++) {
+			Account account = new Account(i, faker.name().fullName());
+			streamCallback.message(account);
+
+			for (Stock stock : stocks) {
+				Holdings h = new Holdings(HOLDINGS_SEQ.incrementAndGet(), i, stock.id,
+						new Timestamp(System.currentTimeMillis()), START_HOLDING);
+				streamCallback.message(new HoldingsKey(h.getAccountId(), h.getProductId()), h);
+
+			}
+		}
 
 		random = new Random();
-		gson = new Gson();
-		pubNub = new PubNub(new PNConfiguration());
 	}
 
 	public void start() {
@@ -54,19 +80,22 @@ public class RandomMarketTicker implements Runnable, MarketTicker {
 
 	@Override
 	public void run() {
+		for (Stock stock : stocks) {
+			updatePrice(stock);
+			streamCallback.message(stock.toProductPrice());
+		}
+
 		Stock stock = stocks.get(random.nextInt(stocks.size()));
-		updatePrice(stock);
+
 		String type = Trade.TRADE_TYPE.BUY.name();
 		if (random.nextBoolean()) {
 			type = Trade.TRADE_TYPE.SELL.name();
 		}
-		Trade trade = new Trade(stock.name, random.nextInt(500), stock.currentPrice, type,
-				new Timestamp(System.currentTimeMillis()));
-		
-		JsonElement json = gson.toJsonTree(trade);
 
-		PNMessageResult result = PNMessageResult.builder().message(json).build();
-		streamCallback.message(pubNub, result);
+		Trade trade = new Trade(TRADE_SEQ.getAndIncrement(), (long) random.nextInt(NUM_ACCOUNTS), stock.id,
+				random.nextInt(500), stock.currentPrice, type, new Timestamp(System.currentTimeMillis()));
+
+		streamCallback.message(trade);
 	}
 
 	private void updatePrice(Stock stock) {
@@ -96,16 +125,29 @@ public class RandomMarketTicker implements Runnable, MarketTicker {
 
 	public static class Stock {
 
+		private long id;
 		public String name;
+		public String symbol;
 		public double minPrice;
 		public double maxPrice;
 		public double currentPrice;
 
-		public Stock(String name, double minPrice, double maxPrice, double currentPrice) {
+		public Stock(long id, String name, String symbol, double minPrice, double maxPrice, double currentPrice) {
+			this.id = id;
 			this.name = name;
+			this.symbol = symbol;
 			this.minPrice = minPrice;
 			this.maxPrice = maxPrice;
 			this.currentPrice = currentPrice;
+		}
+
+		public Product toProduct() {
+			return new Product(id, symbol, name);
+		}
+
+		public ProductPrice toProductPrice() {
+			return new ProductPrice(PROD_PRICE_SEQ.incrementAndGet(), new Timestamp(System.currentTimeMillis()), id,
+					currentPrice);
 		}
 	}
 
