@@ -3,3 +3,4 @@ ignite/
 .settings/
 .project
 .classpath
+.factorypath
