@@ -1,0 +1,12 @@
+{
+  "type" : "record",
+  "name" : "ProductPrice",
+  "namespace" : "org.gridgain.demo.kafka",
+  "version": "1",
+  "fields" : [ 
+   {"name" : "id", "type" : "string", "doc" : "Trade ID"}, 
+   {"name" : "time", "type" : "long", "doc" : "time"},
+   {"name" : "symbol", "type" : "string", "doc" : "Stock Symbol"},
+   {"name" : "price", "type" : "double", "doc" : "Price"} 
+  ]
+}

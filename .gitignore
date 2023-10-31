@@ -1,5 +1,7 @@
 target/
 ignite/
+bin/
 .settings/
 .project
 .classpath
+.pydevproject

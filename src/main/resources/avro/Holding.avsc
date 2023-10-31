@@ -1,0 +1,13 @@
+{
+  "type" : "record",
+  "name" : "Holding",
+  "namespace" : "org.gridgain.demo.kafka.model",
+  "version": "1",
+  "fields" : [ 
+   {"name" : "id", "type" : "string", "doc" : "Id"}, 
+   {"name" : "accountId", "type" : "string", "doc" : "Account Id"}, 
+   {"name" : "lastTradeDate", "type" : "long", "doc" : "Last Trade Date"},
+   {"name" : "shareCount", "type" : "long", "doc" : "Share Count"},
+   {"name" : "symbol", "type" : "string", "doc" : "Symbol"}
+  ]
+}

@@ -1,7 +1,9 @@
 package org.gridgain.demo;
 
-public interface MarketTicker {
-
+public interface MarketTicker extends Runnable {
+	
 	public void start();
 	public void stop();
+
+
 }

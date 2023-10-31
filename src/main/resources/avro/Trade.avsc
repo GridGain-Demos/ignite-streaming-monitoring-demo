@@ -1,0 +1,15 @@
+{
+  "type" : "record",
+  "name" : "Trade",
+  "namespace" : "org.gridgain.demo.kafka",
+  "version": "1",
+  "fields" : [ 
+   {"name" : "id", "type" : "string", "doc" : "Trade ID"}, 
+   {"name" : "accountId", "type" : "string", "doc" : "Account ID"},
+   {"name" : "stock", "type" : "string", "doc" : "Stock Symbol"},
+   {"name" : "order_quantity", "type" : "int", "doc" : "Order Quantity"},
+   {"name" : "bid_price", "type" : "double", "doc" : "Bid Price"},
+   {"name" : "trade_type", "type" : "string", "doc" : "Trade Type"}, 
+   {"name" : "order_date", "type" : "long", "doc" : "Order Date"} 
+  ]
+}

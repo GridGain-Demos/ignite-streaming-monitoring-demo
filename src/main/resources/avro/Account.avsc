@@ -1,0 +1,10 @@
+{
+  "type" : "record",
+  "name" : "Account",
+  "namespace" : "org.gridgain.demo.kafka",
+  "version": "1",
+  "fields" : [ 
+   {"name" : "id", "type" : "string", "doc" : "Account Id"}, 
+   {"name" : "name", "type" : "string", "doc" : "Stock Name"}
+  ]
+}
