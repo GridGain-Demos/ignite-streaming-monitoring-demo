@@ -1,7 +1,7 @@
 {
   "type" : "record",
   "name" : "Trade",
-  "namespace" : "org.gridgain.demo.kafka",
+  "namespace" : "org.gridgain.demo.kafka.model",
   "version": "1",
   "fields" : [ 
    {"name" : "id", "type" : "string", "doc" : "Trade ID"}, 

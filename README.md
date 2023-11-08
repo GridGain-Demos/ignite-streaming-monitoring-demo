@@ -1,4 +1,4 @@
-# Apache Ignite Market Orders Streaming Demo
+```# Apache Ignite Market Orders Streaming Demo
 
 The demo starts a simple application that simulates trading activities of a stock exchange.
 
@@ -35,8 +35,12 @@ export IGNITE_EVENT_DRIVEN_SERVICE_PROCESSOR_ENABLED=true
 bin/ignite.sh -f .../ignite-streaming-monitoring-demo/config/config-server.xml
 ```
 
-### Build the project
+### Generate Source files for Kafka from Avro schema files (src/main/resources/avro)
+```bash
+mvn generate-sources
+```
 
+### Build the project
 ```bash
 mvn clean package
 ```
@@ -55,26 +59,23 @@ java -jar target/ignite-streaming-app.jar
 ## Setup Kafka
 1. Download binary package
 
-    ```console
+    ```bash
     curl -O https://packages.confluent.io/archive/7.5/confluent-7.5.1.tar.gz
     ```
 2. Extract contents
 
-    ``` 
+    ```bash
     tar -xvzf confluent-7.5.1.tar.gz
     ```
 3. Set Environment
     
-    ```
-    export CONFLUENT_HOME=.../confluent-7.5.0
-    ```
-
-    ```
+    ```bash
+    export CONFLUENT_HOME=.../confluent-7.5.1
     export PATH=$PATH:$CONFLUENT_HOME/bin
     ```
 4. Install GridGain Kafka Connector
     
-    ```
+    ```bash
     confluent-hub install gridgain/gridgain-kafka-connect:8.8.34
     The component can be installed in any of the following Confluent Platform installations:
      1. .../confluent-7.5.1 (based on $CONFLUENT_HOME)
@@ -113,9 +114,27 @@ java -jar target/ignite-streaming-app.jar
 
     ```
 
-```bash
-confluent local services start
-confluent local services connect stop
-cp -r ~/gridgain/gridgain-ultimate-8.8.34/libs/optional/control-center-agent share/confluent-hub-components/gridgain-gridgain-kafka-connect/lib
-connect-standalone etc/kafka/connect-standalone.properties ~/git/ignite-streaming-monitoring-demo/kafka-connect/gridgain-kafka-connect-sink.properties
-```
+5. Start all of the Kafka Services and then stop the connect service (we will run it with GridGain connector enabled and having more than one run locally will give a port conflict for the embedded REST service)
+	
+	```bash
+	confluent local services start
+	confluent local services connect stop
+	```
+	
+6. (Optional) Copy control center libraries
+
+	```bash
+	cp -r ~/gridgain/gridgain-ultimate-8.8.34/libs/optional/control-center-agent share/confluent-hub-components/gridgain-gridgain-kafka-connect/lib
+	```
+	
+7. Start the connector with GridGain connector enabled
+
+	```bash
+	connect-standalone etc/kafka/connect-standalone.properties ~/git/ignite-streaming-monitoring-demo/kafka-connect/gridgain-kafka-connect-sink.properties
+	```
+
+8. Monitor Kafka Cluster using Confluent Control Center
+
+	Point your browser to http://127.0.0.1:9021/clusters
+	
+![image](images/ccc.png)

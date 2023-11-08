@@ -74,6 +74,11 @@
 					<artifactId>gridgain-ultimate</artifactId>
 					<version>${gridgain.version}</version>
 				</dependency>
+				<dependency>
+					<groupId>org.gridgain</groupId>
+					<artifactId>gridgain-ultimate</artifactId>
+					<version>${gridgain.version}</version>
+				</dependency>				
 			</dependencies>
 		</profile>
 		<profile>

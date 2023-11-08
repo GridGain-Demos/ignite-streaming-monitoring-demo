@@ -2,19 +2,25 @@ package org.gridgain.demo;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 
+import java.lang.reflect.Constructor;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
 
 import org.gridgain.demo.compute.ComputePortfolio;
-import org.gridgain.demo.data.CsvStockTicker;
+import org.gridgain.demo.kafka.KafkaCsvStockTicker;
 import org.gridgain.demo.model.Account;
 
 public class StreamingApplication implements AutoCloseable, Runnable {
+	// Select time to run the application
 	private static int EXEC_TIME_MINS = 30;
-	//private static Class MARKET_TICKER = RandomMarketTicker.class;
-	private static Class<? extends MarketTicker> MARKET_TICKER = CsvStockTicker.class;
+	
+	// Choose the Ticker you would like to use 
+	//private static Class<? extends MarketTicker> MARKET_TICKER = RandomMarketTicker.class;
+	//private static Class<? extends MarketTicker> MARKET_TICKER = CsvStockTicker.class;
+	private static Class<? extends MarketTicker> MARKET_TICKER = KafkaCsvStockTicker.class;
+	
 	private MarketTicker ticker;
 	private IgniteClientHelper ich;
 	private IgniteStreamCallback streamCallback;
@@ -43,10 +49,14 @@ public class StreamingApplication implements AutoCloseable, Runnable {
 		ich = new IgniteClientHelper();
 
 		new HoldingsUpdater(ich);
-
-		streamCallback = new IgniteStreamCallback(ich);
-
-		ticker = MARKET_TICKER.getDeclaredConstructor(StreamCallback.class).newInstance(streamCallback);
+		
+		Constructor<? extends MarketTicker> constructor = MARKET_TICKER.getDeclaredConstructor(StreamCallback.class);
+		if (constructor != null) {
+			streamCallback = new IgniteStreamCallback(ich);
+			ticker = constructor.newInstance(streamCallback);
+		} else {
+			ticker = MARKET_TICKER.newInstance();
+		}
 		ticker.start();
 
 		Executors.newSingleThreadScheduledExecutor().scheduleAtFixedRate(this, 5, 30, SECONDS);

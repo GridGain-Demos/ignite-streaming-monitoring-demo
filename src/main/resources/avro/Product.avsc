@@ -1,7 +1,7 @@
 {
   "type" : "record",
   "name" : "Product",
-  "namespace" : "org.gridgain.demo.kafka",
+  "namespace" : "org.gridgain.demo.kafka.model",
   "version": "1",
   "fields" : [ 
    {"name" : "symbol", "type" : "string", "doc" : "Stock Symbol"}, 

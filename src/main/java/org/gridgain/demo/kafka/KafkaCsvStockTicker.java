@@ -19,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
+import org.gridgain.demo.MarketTicker;
 import org.gridgain.demo.data.DayData;
 import org.gridgain.demo.data.StockTicker;
 import org.gridgain.demo.kafka.model.Account;
@@ -30,12 +31,12 @@ import org.gridgain.demo.model.TradeType;
 
 import com.github.javafaker.Faker;
 
-public class KafkaCsvStockTicker implements Runnable {
+public class KafkaCsvStockTicker implements MarketTicker {
 
 	public static final String START_DATE = "09/23/2013";
-	public static final String[] STOCKS = { "AAPL", "AMD", "AMZN", "CSCO", "META", "MSFT", "NFLX", "QCOM", "TSLA" };
+	public static final String[] STOCKS = { "AAPL", "AMD", "AMZN", "CSCO", "META", "MSFT", "NFLX", "QCOM", "TSLA", "IBM" };
 	public static final String[] STOCK_NAMES = { "Apple", "AMD", "Amazon", "Cisco", "Meta", "Microsoft", "Netflix",
-			"Qualcom", "Tesla" };
+			"Qualcom", "Tesla", "IBM" };
 
 	public static final boolean DEBUG = false;
 	public static final int TICKS_PER_DAY = 1000;
@@ -57,7 +58,7 @@ public class KafkaCsvStockTicker implements Runnable {
 
 		ticker.start();
 	}
-
+	
 	public KafkaCsvStockTicker() throws IOException, ParseException {
 		kafkaSender = new KafkaSender();
 
@@ -89,12 +90,11 @@ public class KafkaCsvStockTicker implements Runnable {
 			accounts.add(account);
 			kafkaSender.send(account);
 
-			for (int j = 0; j < STOCKS.length; j++) {
+			for (int j = 0; j < STOCKS.length - 1; j++) {
 				String pId = tickers.get(STOCKS[j]).getSymbol();
 				Holding h = new Holding(UUID.randomUUID().toString(), account.getId(),
 						System.currentTimeMillis(), START_HOLDING, pId);
 				kafkaSender.send(h);
-				//streamCallback.message(new HoldingsKey(h.getAccountId(), h.getProductId()), h);
 			}
 		}
 	}
@@ -140,7 +140,7 @@ public class KafkaCsvStockTicker implements Runnable {
 		}
 
 		if (random.nextBoolean()) {
-			int stockId = random.nextInt(STOCKS.length);
+			int stockId = random.nextInt(STOCKS.length - 1);
 			String stock = STOCKS[stockId];
 			StockTicker stockTicker = tickers.get(stock);
 
