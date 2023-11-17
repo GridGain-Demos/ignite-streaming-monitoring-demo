@@ -64,7 +64,8 @@ public class KafkaCsvStockTicker implements MarketTicker {
 
 		for (int i = 0; i < STOCKS.length; i++) {
 			String stock = STOCKS[i];
-			InputStream inputStream = KafkaCsvStockTicker.class.getClassLoader().getResourceAsStream("data/" + stock + ".csv");
+			InputStream inputStream = KafkaCsvStockTicker.class.getClassLoader()
+					.getResourceAsStream("data/" + stock + ".csv");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
 			CSVParser parser = CSVFormat.DEFAULT.withHeader().parse(reader);
 			List<CSVRecord> records = parser.getRecords();
@@ -150,7 +151,7 @@ public class KafkaCsvStockTicker implements MarketTicker {
 			}
 
 			Trade trade = new Trade(UUID.randomUUID().toString(), accounts.get(random.nextInt(NUM_ACCOUNTS)).getId(),
-					stockTicker.getSymbol(), random.nextInt(500), stockTicker.getCurrentPrice(), type,
+					stock, random.nextInt(500), stockTicker.getCurrentPrice(), type,
 					System.currentTimeMillis());
 			kafkaSender.send(trade);
 		}

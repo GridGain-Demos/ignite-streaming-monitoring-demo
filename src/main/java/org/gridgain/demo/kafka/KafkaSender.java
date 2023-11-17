@@ -6,10 +6,10 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.gridgain.demo.kafka.model.Account;
+import org.gridgain.demo.kafka.model.Holding;
 import org.gridgain.demo.kafka.model.Product;
 import org.gridgain.demo.kafka.model.ProductPrice;
 import org.gridgain.demo.kafka.model.Trade;
-import org.gridgain.demo.kafka.model.Holding;
 
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig;
 import io.confluent.kafka.serializers.KafkaAvroSerializer;
@@ -67,6 +67,7 @@ public class KafkaSender implements AutoCloseable {
 	}
 
 	public void send(Trade trade) {
+		System.out.println(trade.toString());
 		ProducerRecord<String, Trade> record = new ProducerRecord<>(TRADE_TOPIC, trade.getId(), trade);
 		tradeProducer.send(record);
 	}

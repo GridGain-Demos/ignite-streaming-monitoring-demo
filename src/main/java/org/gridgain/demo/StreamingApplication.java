@@ -50,7 +50,11 @@ public class StreamingApplication implements AutoCloseable, Runnable {
 
 		new HoldingsUpdater(ich);
 		
-		Constructor<? extends MarketTicker> constructor = MARKET_TICKER.getDeclaredConstructor(StreamCallback.class);
+		Constructor<? extends MarketTicker> constructor = null;
+		try {
+			constructor = MARKET_TICKER.getDeclaredConstructor(StreamCallback.class);
+		} catch (NoSuchMethodException e) {
+		}
 		if (constructor != null) {
 			streamCallback = new IgniteStreamCallback(ich);
 			ticker = constructor.newInstance(streamCallback);
