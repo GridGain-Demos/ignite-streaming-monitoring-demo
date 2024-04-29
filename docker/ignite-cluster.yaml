@@ -1,0 +1,67 @@
+version: '3.7'
+services:
+  ignite-server-node-1:
+    image: gridgain/ultimate:8.8.26
+    environment:
+      - CONFIG_URI=/opt/ignite/ext-config/ignite-config-node.xml
+      - LICENCE_URL=/opt/ignite/ext-config/gridgain-ultimate-license.xml
+      - IGNITE_EVENT_DRIVEN_SERVICE_PROCESSOR_ENABLED=true
+      - IGNITE_WORK_DIR=/opt/ignite/work
+      - OPTION_LIBS=control-center-agent
+    networks:
+      - ignite-net
+    ports:
+      - target: 10800
+        host_ip: 127.0.0.1
+        published: 10800
+        protocol: tcp
+        mode: host
+    volumes:
+      - ../config:/opt/ignite/ext-config
+      - ../work:/opt/ignite/work
+  ignite-server-node-2:
+    image: gridgain/ultimate:8.8.26
+    environment:
+      - CONFIG_URI=/opt/ignite/ext-config/ignite-config-node.xml
+      - LICENCE_URL=/opt/ignite/ext-config/gridgain-ultimate-license.xml
+      - IGNITE_EVENT_DRIVEN_SERVICE_PROCESSOR_ENABLED=true
+      - IGNITE_WORK_DIR=/opt/ignite/work
+      - OPTION_LIBS=control-center-agent
+    networks:
+      - ignite-net
+    ports:
+      - target: 10800
+        host_ip: 127.0.0.1
+        published: 10801
+        protocol: tcp
+        mode: host
+    volumes:
+      - ../config:/opt/ignite/ext-config
+      - ../work:/opt/ignite/work
+  ignite-server-node-3:
+    image: gridgain/ultimate:8.8.26
+    environment:
+      - CONFIG_URI=/opt/ignite/ext-config/ignite-config-node.xml
+      - LICENCE_URL=/opt/ignite/ext-config/gridgain-ultimate-license.xml
+      - IGNITE_EVENT_DRIVEN_SERVICE_PROCESSOR_ENABLED=true
+      - IGNITE_WORK_DIR=/opt/ignite/work
+      - OPTION_LIBS=control-center-agent
+    networks:
+      - ignite-net
+    ports:
+      - target: 10800
+        host_ip: 127.0.0.1
+        published: 10802
+        protocol: tcp
+        mode: host
+    volumes:
+      - ../config:/opt/ignite/ext-config
+      - ../work:/opt/ignite/work
+
+networks:
+  ignite-net:
+    driver: bridge
+
+volumes:
+  config:
+    external: true

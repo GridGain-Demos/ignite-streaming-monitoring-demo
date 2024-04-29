@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<gridgain-license version="2.1">
+    <id>6ae711f2-aa62-48aa-b33f-ccd3795abe57</id>
+    <issue-date>06/15/2023</issue-date>
+    <maintenance-time>0</maintenance-time>
+    <user-org>GridGain Systems</user-org>
+    <license-note>Ultimate Edition with Standard Support – Non-Production for Internal Evaluation use for 3-months</license-note>
+    <user-www>https://www.gridgain.com</user-www>
+    <user-email>peter.whitney@gridgain.com</user-email>
+    <user-name>Peter Whitney</user-name>
+    <type>EVL</type>
+    <expire-date>09/15/2023</expire-date>
+    <max-nodes>10</max-nodes>
+    <max-cpus>40</max-cpus>
+    <max-computers>0</max-computers>
+    <grace-period>0</grace-period>
+    <max-uptime>0</max-uptime>
+    <signature>302D02147D02FB2D596AE1759E34FEE3C63166BB2BD33D6202150093ADA62727EF95B7BF8A8A923AEE864ADBD7BB62</signature>
+    <enabled-feature name="ultimate"/>
+</gridgain-license>

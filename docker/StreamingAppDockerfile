@@ -1,0 +1,8 @@
+FROM openjdk:8
+COPY ./target/dependency-jars /usr/app/dependency-jars
+ADD ./target/ignite-streaming-app.jar /usr/app/ignite-streaming-app.jar
+COPY ./config /opt/ignite/ext-config
+ADD ./config/gridgain-ultimate-license.xml /opt/ignite/ext-config/gridgain-ultimate-license.xml
+WORKDIR /usr/app
+ENTRYPOINT java -jar ignite-streaming-app.jar execTime=$execTime
+
