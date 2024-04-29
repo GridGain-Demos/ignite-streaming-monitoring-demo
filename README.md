@@ -18,13 +18,19 @@ and
 
 ## Dependencies
 
-This demo is configured to execute against GridGain Ultimate Edition version 8.8.26.
+This demo is configured to execute against GridGain Ultimate Edition version 8.9.0  
 
-The application creates 3 docker images each of which operates as 1/3 of a three node
-GridGain cluster. The Cluster node configurations enable native persistence, open census
-API, snapshots, ... 
+## Changes for your Environment
 
-You will need to change the snapshot path in the ignite-config-node.xml file to a valid
-path for your system before starting your docker images.
+You will need to change the snapshot path in the ignite-config-node.xml  
+file to a valid path for your system before starting your server nodes.  
 
+You will need to obtain a demo license and change the license file  
+location to a valid path for your environment in the ignite-config-node.xml  
+file before starting your server nodes.  
+
+## Running for your Environment
+Launch one or more server nodes each in its own command window.  
+The Cluster node configurations enable native persistence, open census
+API, snapshots, ...  
 
