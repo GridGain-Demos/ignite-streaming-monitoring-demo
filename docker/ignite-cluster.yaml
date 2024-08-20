@@ -1,11 +1,12 @@
 version: '3.7'
 services:
   ignite-server-node:
-    image: gridgain/ultimate:8.7.33
+    image: gridgain/ultimate:8.8.9-slim
     environment:
       - CONFIG_URI=/opt/ignite/ext-config/ignite-config-node.xml
       - IGNITE_WORK_DIR=/opt/ignite/work
       - OPTION_LIBS=control-center-agent
+      - JVM_OPTS=-Dcontrol.center.agent.uris=https://portal.gridgain.com/
     networks:
       - ignite-net
     volumes:
