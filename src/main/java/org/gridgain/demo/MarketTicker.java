@@ -68,8 +68,13 @@ public class MarketTicker {
         stream.subscribe().channels(Arrays.asList(STREAM_NAME)).execute();
     }
 
+    public long getTradeCount() {
+        return counter.get();
+    }
+
     public void stop() {
         stream.unsubscribe().execute();
+        stream.destroy();
     }
 
     private class StreamCallback extends SubscribeCallback {
@@ -105,7 +110,7 @@ public class MarketTicker {
             JsonElement mes = result.getMessage();
             JsonObject json = mes.getAsJsonObject();
 
-            TradeKey key = new TradeKey(counter.incrementAndGet(), new Random().nextInt(6) + 1);
+            TradeKey key = new TradeKey(counter.incrementAndGet(), new Random().nextInt(1024) + 1);
 
             Trade trade = new Trade(
                 json.get("symbol").getAsString(),

@@ -34,3 +34,25 @@ Launch one or more server nodes each in its own command window.
 The Cluster node configurations enable native persistence, open census
 API, snapshots, ...  
 
+## Program Arguments  
+The program supports 2 command line arguments described as follows:  
+execTime=x where x is the desired number of minutes to run the program for  
+If the execTime argument is not supplied then the default execTime is 15 minutes  
+
+execCount=y where y is the minimum number of Trade records to save   
+Note that if the execCount argument is supplied then this argument overrides the    
+execTime argument and the system will check the saved records every 30 seconds.
+The program will stop after y number of records or more have been saved.  
+
+## Example Invocations
+Example invocations are listed below (windows):  
+java -cp .\target\ignite-streaming-app.jar org.gridgain.demo.StreamingApplication  
+java -cp .\target\ignite-streaming-app.jar org.gridgain.demo.StreamingApplication execTime=10  
+java -cp .\target\ignite-streaming-app.jar org.gridgain.demo.StreamingApplication execCount=1000  
+
+Example invocations are listed below (linux):  
+java -cp ./target/ignite-streaming-app.jar org.gridgain.demo.StreamingApplication  
+java -cp ./target/ignite-streaming-app.jar org.gridgain.demo.StreamingApplication execTime=10 
+java -cp ./target/ignite-streaming-app.jar org.gridgain.demo.StreamingApplication execCount=1000  
+
+
