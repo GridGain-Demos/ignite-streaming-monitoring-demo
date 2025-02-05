@@ -8,7 +8,8 @@ import org.apache.ignite.IgniteCache;
 import org.apache.ignite.IgniteCompute;
 import org.apache.ignite.IgniteException;
 import org.apache.ignite.cache.query.SqlFieldsQuery;
-import org.gridgain.demo.IgniteClientHelper;
+import org.gridgain.demo.DemoConfiguration;
+import org.gridgain.demo.StreamingApplication;
 import org.gridgain.demo.model.Account;
 import org.gridgain.demo.model.Holding;
 import org.gridgain.demo.model.HoldingKey;
@@ -28,13 +29,13 @@ public class ComputePortfolio implements Serializable {
 	private static final double MEAN = 1.0;
 	private static final double STD_DEV = .5;
 
-	public ComputePortfolio(IgniteClientHelper ich, String accountId) throws IgniteException {
+	public ComputePortfolio(StreamingApplication sa, String accountId) throws IgniteException {
 
-		IgniteCompute compute = ich.getIgnite().compute();
-		IgniteCache<String, Account> accountCache = ich.getAccountCache();
-		IgniteCache<HoldingKey, Holding> cache = ich.getHoldingCache();
+		IgniteCompute compute = sa.getIgnite().compute();
+		IgniteCache<String, Account> accountCache = sa.getAccountCache();
+		IgniteCache<HoldingKey, Holding> cache = sa.getHoldingCache();
 
-		compute.affinityRun(IgniteClientHelper.ACCOUNT_CACHE_NAME, accountId, () -> {
+		compute.affinityRun(DemoConfiguration.ACCOUNT_CACHE_NAME, accountId, () -> {
 			SqlFieldsQuery query = new SqlFieldsQuery(PORTFOLIO_QUERY);
 			query.setArgs(accountId);
 			query.setCollocated(true);

@@ -16,37 +16,37 @@ import org.gridgain.demo.model.Trade;
 
 public class IgniteStreamCallback implements StreamCallback {
 	
-	private IgniteClientHelper ich;
+	private StreamingApplication sa;
 	private List<Account> accounts = new ArrayList<>();
     
-    public IgniteStreamCallback(IgniteClientHelper ich) {
-        this.ich = ich;
+    public IgniteStreamCallback(StreamingApplication sa) {
+        this.sa = sa;
     }
 
     public void message(Trade trade) {
-        IgniteTransactions txs = ich.getIgnite().transactions();
+        IgniteTransactions txs = sa.getIgnite().transactions();
 
         try (Transaction tx = txs.txStart(TransactionConcurrency.PESSIMISTIC, TransactionIsolation.REPEATABLE_READ)) {
             // Using transactions to demonstrate tracing capabilities.
-            ich.getTradeCache().put(trade.getId(), trade);
+            sa.getTradeCache().put(trade.getId(), trade);
             tx.commit();
         }
     }
 
 	public void message(ProductPrice productPrice) {
-		ich.getProductPriceCache().put(productPrice.getId(), productPrice);
+		sa.getProductPriceCache().put(productPrice.getId(), productPrice);
 	}
 	
 	public void message(Account account) {
-		ich.getAccountCache().put(account.getId(), account);
+		sa.getAccountCache().put(account.getId(), account);
 		accounts.add(account);
 	}
 	public void message(Product product) {
-		ich.getProductCache().put(product.getSymbol(), product);
+		sa.getProductCache().put(product.getSymbol(), product);
 	}
 
 	public void message(HoldingKey holdingsKey, Holding holding) {
-		ich.getHoldingCache().put(holdingsKey, holding);
+		sa.getHoldingCache().put(holdingsKey, holding);
 	}
 	
 	public List<Account> getAccounts() {

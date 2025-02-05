@@ -15,11 +15,11 @@ import org.gridgain.demo.model.Trade;
 
 public class HoldingsUpdater {
 
-	public HoldingsUpdater(IgniteClientHelper ich) {
+	public HoldingsUpdater(StreamingApplication sa) {
 		System.out.println("Starting Holding Updater (Continuous Query)...");
 
-		IgniteCache<String, Trade> tradeCache = ich.getTradeCache();
-		IgniteCache<HoldingKey, Holding> holdingsCache = ich.getHoldingCache();
+		IgniteCache<String, Trade> tradeCache = sa.getTradeCache();
+		IgniteCache<HoldingKey, Holding> holdingsCache = sa.getHoldingCache();
 
 		ContinuousQuery<Long, Trade> query = new ContinuousQuery<>();
 
