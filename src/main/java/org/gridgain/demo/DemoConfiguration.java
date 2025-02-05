@@ -12,6 +12,8 @@ import org.apache.ignite.configuration.DataStorageConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
 import org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder;
+import org.apache.ignite.spi.tracing.opencensus.OpenCensusTracingSpi;
+import org.gridgain.control.agent.processor.deployment.ManagedDeploymentSpi;
 
 public class DemoConfiguration extends IgniteConfiguration {
 
@@ -46,17 +48,19 @@ public class DemoConfiguration extends IgniteConfiguration {
 		nameMapper.setSimpleName(true);
 		binaryConfiguration.setNameMapper(nameMapper);
 		setBinaryConfiguration(binaryConfiguration);
-		
-		
+
+		setTracingSpi(new OpenCensusTracingSpi());
+		setDeploymentSpi(new ManagedDeploymentSpi());
+
 		DataStorageConfiguration dataStorageConfiguration = new DataStorageConfiguration();
-		
+
 		DataRegionConfiguration defaultDataRegionConfiguration = new DataRegionConfiguration();
 		defaultDataRegionConfiguration.setName("Default_Region");
 		defaultDataRegionConfiguration.setInitialSize(100 * 1024 * 1024);
-		
+
 		dataStorageConfiguration.setDefaultDataRegionConfiguration(defaultDataRegionConfiguration);
 		dataStorageConfiguration.setStoragePath("/tmp/GGData");
-		
+
 		DataRegionConfiguration dataRegionConfiguration = new DataRegionConfiguration();
 		dataRegionConfiguration.setName(DATA_REGION);
 		dataRegionConfiguration.setPersistenceEnabled(true);
