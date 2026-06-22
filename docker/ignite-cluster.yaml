@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   ignite-server-node:
-    image: gridgain/ultimate:8.8.9-slim
+    image: gridgain/ultimate:8.9.34-arm64
     environment:
       - CONFIG_URI=/opt/ignite/ext-config/ignite-config-node.xml
       - IGNITE_WORK_DIR=/opt/ignite/work
@@ -11,8 +11,17 @@ services:
       - ignite-net
     volumes:
       - ../config:/opt/ignite/ext-config
-      - ../work:/opt/ignite/work
+      - ../config/gridgain-license.xml:/opt/gridgain/gridgain-license.xml:ro
+      - ignite-work:/opt/ignite/work
 
 networks:
   ignite-net:
     driver: bridge
+
+# 'work' uses a named volume rather than a ../work host bind mount on purpose:
+# Docker Desktop's virtualized bind mounts don't reliably support the atomic file
+# renames WAL archiving needs, which crashes nodes with
+# "Failed to move temp file to a regular WAL segment file". A named volume avoids
+# this on every platform; don't switch it back to a host bind mount.
+volumes:
+  ignite-work:

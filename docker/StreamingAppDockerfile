@@ -1,4 +1,4 @@
-FROM openjdk:8
+FROM eclipse-temurin:8-jre
 COPY ./target/dependency-jars /usr/app/dependency-jars
 ADD ./target/ignite-streaming-app.jar /usr/app/ignite-streaming-app.jar
 WORKDIR /usr/app

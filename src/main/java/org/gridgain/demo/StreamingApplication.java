@@ -16,6 +16,7 @@
  */
 package org.gridgain.demo;
 
+import java.util.Arrays;
 import java.util.Timer;
 import java.util.TimerTask;
 import org.apache.ignite.Ignite;
@@ -24,6 +25,8 @@ import org.apache.ignite.Ignition;
 import org.apache.ignite.cache.query.SqlFieldsQuery;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
+import org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi;
+import org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder;
 import org.apache.ignite.spi.tracing.opencensus.OpenCensusTracingSpi;
 
 public class StreamingApplication {
@@ -60,6 +63,16 @@ public class StreamingApplication {
 		cfg.setClientMode(true);
 		cfg.setPeerClassLoadingEnabled(true);
 		cfg.setTracingSpi(new OpenCensusTracingSpi());
+
+		// Static discovery for environments where multicast is unavailable (e.g. Docker
+		// bridge networks). Set DISCOVERY_ADDRS to a comma-separated address list; when
+		// unset, Ignite's default multicast discovery is used.
+		String discoveryAddrs = System.getenv("DISCOVERY_ADDRS");
+		if (discoveryAddrs != null && !discoveryAddrs.trim().isEmpty()) {
+			TcpDiscoveryVmIpFinder ipFinder = new TcpDiscoveryVmIpFinder();
+			ipFinder.setAddresses(Arrays.asList(discoveryAddrs.split(",")));
+			cfg.setDiscoverySpi(new TcpDiscoverySpi().setIpFinder(ipFinder));
+		}
 
 		ignite = Ignition.start(cfg);
 
