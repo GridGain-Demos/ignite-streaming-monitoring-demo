@@ -1,0 +1,8 @@
+# Keep the build context small. Docker compiles the app from pom.xml and src/,
+# so exclude build output, local state, IDE files, and the license.
+.git
+target
+work
+working
+config
+*.iml

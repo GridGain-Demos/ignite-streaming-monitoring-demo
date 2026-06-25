@@ -1,6 +1,17 @@
-FROM eclipse-temurin:8-jre
-COPY ./target/dependency-jars /usr/app/dependency-jars
-ADD ./target/ignite-streaming-app.jar /usr/app/ignite-streaming-app.jar
-WORKDIR /usr/app
-ENTRYPOINT java -jar ignite-streaming-app.jar execTime=$execTime
+# Build stage: compile the application and collect its dependency jars with Maven.
+# Building inside Docker means the host does not need a JDK or Maven installed.
+FROM maven:3.9-eclipse-temurin-8 AS build
+WORKDIR /src
+# Resolve dependencies first so this layer is cached when only source changes.
+COPY pom.xml .
+RUN mvn -q dependency:go-offline
+COPY src ./src
+RUN mvn -q clean package
 
+# Runtime stage: run the assembled jar with its dependency jars.
+FROM eclipse-temurin:8-jre
+WORKDIR /usr/app
+COPY --from=build /src/target/dependency-jars ./dependency-jars
+COPY --from=build /src/target/ignite-streaming-app.jar ./ignite-streaming-app.jar
+# sh -c form so $execTime (set in the compose file) is expanded at runtime.
+ENTRYPOINT ["sh", "-c", "java -jar ignite-streaming-app.jar execTime=$execTime"]
