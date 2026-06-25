@@ -1,7 +1,8 @@
-docker-compose -f docker/ignite-streaming-app.yaml stop
-docker container rm ignite-streaming-app
-docker image rm ignite-streaming-app
+#!/bin/bash
+# Rebuild the streaming application image from source and restart its container.
+# Docker compiles the jar inside the image (see docker/StreamingAppDockerfile),
+# so no local JDK or Maven is required. Run this from the repository root.
+set -e
 
-mvn clean package
-docker build -f docker/StreamingAppDockerfile -t ignite-streaming-app .
-
+docker compose -f docker/ignite-streaming-app.yaml down
+docker compose -f docker/ignite-streaming-app.yaml up -d --build

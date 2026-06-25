@@ -7,6 +7,22 @@ connection is required.
 The demo supports the GridGain Control Center [written tutorial](https://www.gridgain.com/docs/tutorials/management-monitoring/overview)
 and [instructor-led foundation course](https://www.gridgain.com/products/services/training/how-monitor-and-manage-apache-ignite-gridgain-control-center).
 
+## Building and running
+
+Docker compiles the application from source (see `docker/StreamingAppDockerfile`), so you do not need a local JDK or
+Maven. Build the image and start the application with one command:
+
+```bash
+docker compose -f docker/ignite-streaming-app.yaml up -d --build
+```
+
+The application joins the running GridGain cluster as a client and streams trades into it. For the full walkthrough,
+including how to start the cluster and GridGain Control Center first, follow the
+[written tutorial](https://www.gridgain.com/docs/tutorials/management-monitoring/overview).
+
+To build the application outside Docker instead, run `mvn clean package` with a local JDK 8 or later and Apache Maven
+3.3 or later.
+
 ## Streaming live data from PubNub
 
 Instead of generating orders locally, the application can stream live data from the
@@ -14,6 +30,6 @@ Instead of generating orders locally, the application can stream live data from 
 This path requires an Internet connection.
 
 To enable it, set `USE_PUB_NUB` to `true` in `src/main/java/org/gridgain/demo/StreamingApplication.java`, then rebuild
-the application jar and Docker image. The stream's subscribe key is already included in the code, so no PubNub account
-is needed. The PubNub Market Orders stream is a public demo provided by PubNub and may change or become unavailable
-independently of this demo.
+the application image with `docker compose -f docker/ignite-streaming-app.yaml up -d --build`. The stream's subscribe key
+is already included in the code, so no PubNub account is needed. The PubNub Market Orders stream is a public demo
+provided by PubNub and may change or become unavailable independently of this demo.
