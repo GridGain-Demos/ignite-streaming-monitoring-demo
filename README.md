@@ -23,6 +23,24 @@ including how to start the cluster and GridGain Control Center first, follow the
 To build the application outside Docker instead, run `mvn clean package` with a local JDK 8 or later and Apache Maven
 3.3 or later.
 
+## Stopping and restarting
+
+Stop the application without removing its container:
+
+```bash
+docker compose -f docker/ignite-streaming-app.yaml stop
+```
+
+Start the same container again:
+
+```bash
+docker compose -f docker/ignite-streaming-app.yaml start
+```
+
+A restart reuses the existing image, so you do not need `--build`. Rebuild with `--build` only the first time or after
+you change the application source (for example, to toggle PubNub). To remove the container entirely, use
+`docker compose -f docker/ignite-streaming-app.yaml down`.
+
 ## Streaming live data from PubNub
 
 Instead of generating orders locally, the application can stream live data from the
