@@ -6,7 +6,7 @@ services:
       - CONFIG_URI=/opt/ignite/ext-config/ignite-config-node.xml
       - IGNITE_WORK_DIR=/opt/ignite/work
       - OPTION_LIBS=control-center-agent
-      - JVM_OPTS=-Dcontrol.center.agent.uris=https://portal.gridgain.com/
+      - JVM_OPTS=-Dcontrol.center.agent.uris=http://control-center-frontend:8008
     networks:
       - ignite-net
     volumes:

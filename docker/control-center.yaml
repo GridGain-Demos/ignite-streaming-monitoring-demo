@@ -1,7 +1,6 @@
-version: '3.7'
 services:
   backend:
-    image: gridgain/control-center-backend:2020.11.00
+    image: gridgain/control-center-backend:2026.1
     container_name: control-center-backend
     # Restart on crash.
     restart: on-failure
@@ -9,15 +8,15 @@ services:
       - ignite-net
 
   frontend:
-    image: gridgain/control-center-frontend:2020.11.00
+    image: gridgain/control-center-frontend:2026.1
     container_name: control-center-frontend
     depends_on:
       - backend
-    volumes:
-      - ../config/control-center.conf:/etc/nginx/control-center.conf
     ports:
-      # Nginx port number (HOST_PORT:DOCKER_PORT)
-      - 8443:8443
+      # Control Center UI (HOST_PORT:CONTAINER_PORT). The frontend image already
+      # contains the nginx config that listens on 8008 and proxies to
+      # control-center-backend:3000, so no config file needs to be mounted.
+      - 8008:8008
     networks:
       - ignite-net
 
