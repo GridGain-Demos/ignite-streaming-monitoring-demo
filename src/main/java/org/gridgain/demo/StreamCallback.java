@@ -21,7 +21,13 @@ import com.pubnub.api.models.consumer.pubsub.PNMessageResult;
 import com.pubnub.api.models.consumer.pubsub.PNPresenceEventResult;
 
 public class StreamCallback extends SubscribeCallback {
-	
+
+    /** Roughly one in every {@code HEAVY_TX_EVERY} trades runs as a heavier transaction. */
+    private static final int HEAVY_TX_EVERY = 25;
+
+    /** Number of extra trades the heavy transaction writes in a single commit. */
+    private static final int HEAVY_TX_BATCH = 50;
+
     private AtomicLong counter = new AtomicLong();
 	private IgniteCache<TradeKey, Trade> tradeCache;
 	private Ignite ignite;
@@ -62,7 +68,8 @@ public class StreamCallback extends SubscribeCallback {
         JsonElement mes = result.getMessage();
         JsonObject json = mes.getAsJsonObject();
 
-        TradeKey key = new TradeKey(counter.incrementAndGet(), new Random().nextInt(6) + 1);
+        long id = counter.incrementAndGet();
+        TradeKey key = new TradeKey(id, new Random().nextInt(6) + 1);
 
         Trade trade = new Trade(
             json.get("symbol").getAsString(),
@@ -74,11 +81,30 @@ public class StreamCallback extends SubscribeCallback {
 
         IgniteTransactions txs = ignite.transactions();
 
-        try (Transaction tx = txs.txStart(TransactionConcurrency.PESSIMISTIC, TransactionIsolation.REPEATABLE_READ)) {
-            // Using transactions to demonstrate tracing capabilities.
-            tradeCache.put(key, trade);
+        if (id % HEAVY_TX_EVERY == 0) {
+            // Every HEAVY_TX_EVERY trades, run a heavier transaction so the tracing screen
+            // shows some variety. This one uses OPTIMISTIC/SERIALIZABLE and writes a batch of
+            // trades in a single commit, so its commit spans more partitions and nodes and takes
+            // noticeably longer than the steady single-key transactions below. It stands out in
+            // the trace list, letting you drill into the slower transaction and see where the
+            // time goes.
+            try (Transaction tx = txs.txStart(TransactionConcurrency.OPTIMISTIC, TransactionIsolation.SERIALIZABLE)) {
+                tradeCache.put(key, trade);
 
-            tx.commit();
+                for (int i = 0; i < HEAVY_TX_BATCH; i++) {
+                    tradeCache.put(new TradeKey(counter.incrementAndGet(), new Random().nextInt(6) + 1), trade);
+                }
+
+                tx.commit();
+            }
+        }
+        else {
+            try (Transaction tx = txs.txStart(TransactionConcurrency.PESSIMISTIC, TransactionIsolation.REPEATABLE_READ)) {
+                // Using transactions to demonstrate tracing capabilities.
+                tradeCache.put(key, trade);
+
+                tx.commit();
+            }
         }
     }
 
