@@ -1,5 +1,5 @@
 services:
-  backend:
+  control-center-backend:
     image: gridgain/control-center-backend:2026.1
     container_name: control-center-backend
     # Restart on crash.
@@ -7,15 +7,16 @@ services:
     networks:
       - ignite-net
 
-  frontend:
+  control-center-frontend:
     image: gridgain/control-center-frontend:2026.1
     container_name: control-center-frontend
     depends_on:
-      - backend
+      - control-center-backend
     ports:
-      # Control Center UI (HOST_PORT:CONTAINER_PORT). The frontend image already
-      # contains the nginx config that listens on 8008 and proxies to
-      # control-center-backend:3000, so no config file needs to be mounted.
+      # Browser access to Control Center (HOST_PORT:CONTAINER_PORT). The frontend
+      # nginx serves the UI on 8008 and proxies /api, /agents, and /browsers to
+      # control-center-backend:3000. The backend container name must stay
+      # "control-center-backend" because the shipped nginx upstream points at it.
       - 8008:8008
     networks:
       - ignite-net

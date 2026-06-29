@@ -63,15 +63,19 @@
             </bean>
         </property>
 
-        <!-- Configuring the IP finder for nodes auto-discovery. -->
+        <!-- Configuring the IP finder for nodes auto-discovery.
+             Uses a static VM IP finder pointed at the Docker Compose service name.
+             Docker's embedded DNS resolves "ignite-server-node" to the IP of every
+             replica created when scaling the service, so each node finds the others
+             on the shared "ignite-net" bridge network. Multicast is not used because
+             Docker bridge networks do not forward multicast traffic. -->
         <property name="discoverySpi">
             <bean class="org.apache.ignite.spi.discovery.tcp.TcpDiscoverySpi">
                 <property name="ipFinder">
-                    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.multicast.TcpDiscoveryMulticastIpFinder">
+                    <bean class="org.apache.ignite.spi.discovery.tcp.ipfinder.vm.TcpDiscoveryVmIpFinder">
                         <property name="addresses">
                             <list>
-                                <!-- In distributed environment, replace with actual host IP address. -->
-                                <value>127.0.0.1:47500..47509</value>
+                                <value>ignite-server-node:47500..47509</value>
                             </list>
                         </property>
                     </bean>

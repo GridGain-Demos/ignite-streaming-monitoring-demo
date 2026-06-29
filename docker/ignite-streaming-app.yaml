@@ -1,7 +1,12 @@
-version: '3.7'
 services:
   ignite-streaming-app:
     image: ignite-streaming-app
+    # Docker compiles the app from source (see docker/StreamingAppDockerfile),
+    # so "docker compose ... up -d --build" needs no local JDK or Maven.
+    # context is the repo root (the compose file lives in docker/).
+    build:
+      context: ..
+      dockerfile: docker/StreamingAppDockerfile
     container_name: ignite-streaming-app
     deploy:
       resources:
