@@ -1,17 +1,35 @@
-version: '3.7'
 services:
   ignite-server-node:
-    image: gridgain/ultimate:8.8.9-slim
+    # Multi-arch (universal) tag: resolves to linux/amd64 or linux/arm64
+    # automatically. The plain 8.9.34 and latest tags are amd64-only, so they do
+    # not run natively on Apple Silicon; the -arm64 tags are arm64-only. Use the
+    # JDK-variant tag for portability across both architectures.
+    image: gridgain/ultimate:8.9.34-openjdk17
     environment:
       - CONFIG_URI=/opt/ignite/ext-config/ignite-config-node.xml
-      - IGNITE_WORK_DIR=/opt/ignite/work
       - OPTION_LIBS=control-center-agent
-      - JVM_OPTS=-Dcontrol.center.agent.uris=https://portal.gridgain.com/
+      # Point the control-center-agent at the local Control Center started by
+      # docker/control-center.yaml. control-center-frontend is reachable by name
+      # on the shared ignite-net network; its nginx proxies /agents to the backend.
+      - JVM_OPTS=-Dcontrol.center.agent.uris=http://control-center-frontend:8008
     networks:
       - ignite-net
     volumes:
       - ../config:/opt/ignite/ext-config
-      - ../work:/opt/ignite/work
+      - ../config/gridgain-license.xml:/opt/gridgain/gridgain-license.xml:ro
+      # Anonymous volume at the image's own work dir (/opt/gridgain/work, owned by
+      # uid 10000). Two reasons it is an anonymous volume, not a named one:
+      #  1. Each scaled replica (--scale ignite-server-node=N) gets its OWN volume.
+      #     A shared named volume would make every node use the same persistence
+      #     directory and the second node would fail on a file lock.
+      #  2. It is still a Docker-managed volume, not a host bind mount, so WAL
+      #     archiving's atomic file renames work on Docker Desktop. Do NOT switch
+      #     this to a ../work host bind mount: virtualized bind mounts crash nodes
+      #     with "Failed to move temp file to a regular WAL segment file".
+      # Do NOT set IGNITE_WORK_DIR to a path that doesn't exist in the image
+      # (e.g. /opt/ignite/work): Docker creates that mount point as root:root and
+      # the node crashes with "Cannot write to work directory".
+      - /opt/gridgain/work
 
 networks:
   ignite-net:

@@ -3,3 +3,13 @@ ignite/
 .settings/
 .project
 .classpath
+
+# GridGain license is environment-specific; each user supplies their own
+# at config/gridgain-license.xml (copied from ~/.gridgain/gridgain-license.xml).
+config/gridgain-license.xml
+
+# Local working notes and issue write-ups
+working/
+
+# Host work dir created by the streaming app container
+work/
